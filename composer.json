@@ -1,0 +1,25 @@
+{
+  "name": "octosqueeze/php-client",
+  "description": "OctoSqueeze API Client for PHP",
+  "keywords": ["octosqueeze", "api", "client", "php"],
+  "type": "library",
+  "license": "MIT",
+  "homepage": "https://octosqueeze.com/",
+  "authors": [
+      {
+          "name": "OctoSqueeze Team",
+          "email": "contact@octosqueeze.com"
+      }
+  ],
+  "require": {
+      "php": "^7.3 || ^8.0",
+      "guzzlehttp/guzzle": "^7.8"
+  },
+  "autoload": {
+      "psr-4": {
+          "OctoSqueeze\\Client\\": "src/"
+      }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
