@@ -5,6 +5,7 @@ namespace OctoSqueeze\Client;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use Symfony\Component\Filesystem\Filesystem;
 
 final class OctoSqueeze
 {
@@ -34,8 +35,8 @@ final class OctoSqueeze
      */
     protected ?array $options = [
         'formats' => ['avif', 'jpeg'],
+        'hash_check' => false,
         // --
-        'hash_check' => true,
         'image_id_check' => true,
         'quality' => 1, // 1 : smallest size, 2 : best quality
     ];
@@ -80,9 +81,9 @@ final class OctoSqueeze
     /**
      * Sets the options.
      */
-    public function setOptions(array $options): self
+    public function setOptions(array $options, $rewrite = false): self
     {
-        $this->options = $options;
+        $this->options = $rewrite ? $options : array_merge($this->options, $options);
 
         return $this;
     }
@@ -90,9 +91,9 @@ final class OctoSqueeze
     /**
      * Gets the options.
      */
-    public function getOptions(): array
+    public function getOptions($key = null)
     {
-        return $this->options;
+        return $key ? (isset($this->options[$key]) ? $this->options[$key] : null) : $this->options;
     }
 
     /**
@@ -159,6 +160,9 @@ final class OctoSqueeze
 
     public function squeezeUrl(string|array $urls)//: array
     {
+        // $fs = new Filesystem;
+        // $fs->appendToFile('test.txt', '1');
+
         $this->initializeHttpClient();
 
         $client = $this->getHttpClient();
@@ -194,25 +198,22 @@ final class OctoSqueeze
 
         if (isset($exception))
         {
-            dd($exception);
+            // dd($exception);
+            return $exception;
+            // return ['state' => false, 'error' => $exception['message']];
         }
         else
         {
-            $content = json_decode($response->getBody()->getContents(), true);
+            if (isset($response) && $response->getStatusCode() === 200)
+            {
+                $content = json_decode($response->getBody()->getContents(), true);
 
-            dd($content);
-        }
-
-
-        if ($response->getStatusCode() === 200)
-        {
-            $result = json_decode($response->getBody()->getContents(), true);
-
-            return $result;
-        }
-        else
-        {
-            throw new Exception('Something went wrong, bad response');
+                return $content;
+            }
+            else
+            {
+                throw new Exception('Something went wrong, bad response');
+            }
         }
     }
 
