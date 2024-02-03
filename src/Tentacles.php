@@ -52,6 +52,7 @@ class Tentacles
                     if ($image)
                     {
                         $path = $dir .'/'. $filename;
+                        // TODO must be full path
                         $fs->dumpFile($path, $image);
 
                         $completed[] = $path;
