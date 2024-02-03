@@ -29,6 +29,8 @@ class Tentacles
         {
             $fs = new Filesystem();
 
+            // TODO .env
+            // if (env('OCTOSQUEEZE_DEV')) {
             // ! only for dev TLS verification
             $contextOptions = [
                 'ssl' => [
@@ -36,6 +38,7 @@ class Tentacles
                     'verify_peer_name' => false,
                 ]
             ];
+            // }
 
             $completed = [];
 

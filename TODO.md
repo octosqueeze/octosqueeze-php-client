@@ -1,0 +1,2 @@
+.env
+OCTOSQUEEZE_DEV
